@@ -1,73 +1,39 @@
 import sys
 import os
 
+
 def get_transcript(video_id):
+    print("Fetching transcript: " + video_id, file=sys.stderr)
+
+    api_key = os.environ.get("SUPADATA_API_KEY", "")
+    if not api_key:
+        print("No SUPADATA_API_KEY set", file=sys.stderr)
+        print("NO_TRANSCRIPT_AVAILABLE")
+        return
+
     try:
-        from youtube_transcript_api import YouTubeTranscriptApi
-        from youtube_transcript_api._errors import (
-            TranscriptsDisabled,
-            NoTranscriptFound,
-            VideoUnavailable
-        )
+        from supadata import Supadata
+        client = Supadata(api_key=api_key)
+        result = client.youtube.transcript(video_id, text=True)
 
-        print(f"Fetching transcript for: {video_id}", file=sys.stderr)
-        api = YouTubeTranscriptApi()
+        content = result.content if hasattr(result, "content") else str(result)
+        transcript = content.strip() if isinstance(content, str) else " ".join([
+            s.text if hasattr(s, "text") else str(s) for s in content
+        ])
 
-        # Try English first
-        try:
-            transcript = api.fetch(video_id, languages=["en"])
-            text = " ".join([s.text for s in transcript])
-            print(f"Got English transcript: {len(text)} chars", file=sys.stderr)
-            print(text)
-            return
-        except Exception as e:
-            print(f"English failed: {e}", file=sys.stderr)
+        print("Transcript: " + str(len(transcript)) + " chars", file=sys.stderr)
 
-        # Try any available language
-        try:
-            transcript_list = api.list(video_id)
+        if len(transcript) > 30:
+            print(transcript)
+        else:
+            print("NO_TRANSCRIPT_AVAILABLE")
 
-            # Try manually created first
-            try:
-                transcript = transcript_list.find_manually_created_transcript(
-                    ["en","ar","fr","de","es","hi","ur",
-                     "zh","ru","pt","ja","ko","tr","it"])
-                fetched = transcript.fetch()
-                text = " ".join([s.text for s in fetched])
-                print(f"Got manual transcript: {len(text)} chars", file=sys.stderr)
-                print(text)
-                return
-            except Exception as e:
-                print(f"Manual failed: {e}", file=sys.stderr)
-
-            # Try auto-generated
-            try:
-                transcript = transcript_list.find_generated_transcript(
-                    ["en","ar","fr","de","es","hi","ur",
-                     "zh","ru","pt","ja","ko","tr","it"])
-                fetched = transcript.fetch()
-                text = " ".join([s.text for s in fetched])
-                print(f"Got auto transcript: {len(text)} chars", file=sys.stderr)
-                print(text)
-                return
-            except Exception as e:
-                print(f"Auto failed: {e}", file=sys.stderr)
-
-        except TranscriptsDisabled:
-            print("Transcripts disabled", file=sys.stderr)
-        except VideoUnavailable:
-            print("Video unavailable", file=sys.stderr)
-        except Exception as e:
-            print(f"List error: {e}", file=sys.stderr)
-
+    except Exception as e:
+        print("SDK error: " + str(e), file=sys.stderr)
         print("NO_TRANSCRIPT_AVAILABLE")
 
-    except ImportError as e:
-        print(f"Import error: {e}", file=sys.stderr)
-        print("NO_TRANSCRIPT_AVAILABLE")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: get_transcript.py <video_id>", file=sys.stderr)
         sys.exit(1)
     get_transcript(sys.argv[1])

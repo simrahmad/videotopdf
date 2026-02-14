@@ -21,7 +21,8 @@ RUN pip3 install \
     youtube-transcript-api \
     SpeechRecognition \
     pydub \
-    deep-translator
+    deep-translator \
+    supadata
 
 COPY --from=build /app/target/*.jar app.jar
 COPY transcribe.py .
