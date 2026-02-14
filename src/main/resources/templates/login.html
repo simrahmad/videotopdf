@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VideoToPdf — Login</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0d1b4b 0%, #1a2d6e 50%, #0d1b4b 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo h1 {
+      color: #d4af37;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .logo p {
+      color: #8899cc;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .card h2 {
+      color: #0d1b4b;
+      font-size: 22px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .card p.subtitle {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .alert-error {
+      background: #fff0f0;
+      border-left: 4px solid #e53e3e;
+      color: #c53030;
+    }
+
+    .alert-success {
+      background: #f0fff4;
+      border-left: 4px solid #38a169;
+      color: #276749;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #0d1b4b;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #333;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #d4af37;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #0d1b4b, #1a2d6e);
+      color: #d4af37;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      margin-top: 8px;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #d4af37, #c9a227);
+      color: #0d1b4b;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+
+    .divider {
+      text-align: center;
+      margin: 20px 0;
+      color: #aaa;
+      font-size: 13px;
+      position: relative;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+
+    .register-link {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .register-link a {
+      color: #d4af37;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .register-link a:hover { text-decoration: underline; }
+
+    .gold-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #d4af37, #f0d060, #d4af37);
+      border-radius: 16px 16px 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1>VideoToPdf</h1>
+      <p>Convert YouTube Videos to Professional PDFs</p>
+    </div>
+
+    <div class="card">
+      <div class="gold-bar"></div>
+      <br>
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in to your account to continue</p>
+
+      <div th:if="${error}" class="alert alert-error">
+        ⚠️ <span th:text="${error}"></span>
+      </div>
+
+      <div th:if="${message}" class="alert alert-success">
+        ✅ <span th:text="${message}"></span>
+      </div>
+
+      <div th:if="${param.registered}" class="alert alert-success">
+        ✅ Account created successfully! Please sign in.
+      </div>
+
+      <form th:action="@{/login}" method="post">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username"
+                 placeholder="Enter your username" required />
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password"
+                 placeholder="Enter your password" required />
+        </div>
+
+        <button type="submit" class="btn-primary">
+          SIGN IN
+        </button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <div class="register-link">
+        Don't have an account?
+        <a th:href="@{/register}">Create one free</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
