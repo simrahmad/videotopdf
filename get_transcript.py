@@ -1,39 +1,47 @@
 import sys
 import os
 
-
 def get_transcript(video_id):
-    print("Fetching transcript: " + video_id, file=sys.stderr)
-
-    api_key = os.environ.get("SUPADATA_API_KEY", "")
-    if not api_key:
-        print("No SUPADATA_API_KEY set", file=sys.stderr)
-        print("NO_TRANSCRIPT_AVAILABLE")
-        return
-
     try:
-        from supadata import Supadata
-        client = Supadata(api_key=api_key)
-        result = client.youtube.transcript(video_id, text=True)
+        from youtube_transcript_api import YouTubeTranscriptApi
+        
+        print(f"Fetching transcript: {video_id}", file=sys.stderr)
+        api = YouTubeTranscriptApi()
 
-        content = result.content if hasattr(result, "content") else str(result)
-        transcript = content.strip() if isinstance(content, str) else " ".join([
-            s.text if hasattr(s, "text") else str(s) for s in content
-        ])
+        # PRIORITY 1: Try English first
+        try:
+            transcript = api.fetch(video_id, languages=['en'])
+            text = " ".join([s.text for s in transcript])
+            print(f"Got English transcript: {len(text)} chars", file=sys.stderr)
+            print(text)
+            return
+        except Exception as e:
+            print(f"English not available: {e}", file=sys.stderr)
 
-        print("Transcript: " + str(len(transcript)) + " chars", file=sys.stderr)
+        # PRIORITY 2: Get any available transcript
+        try:
+            transcript_list = api.list(video_id)
+            
+            for t in transcript_list:
+                try:
+                    fetched = t.fetch()
+                    text = " ".join([s.text for s in fetched])
+                    print(f"Got {t.language} transcript: {len(text)} chars", file=sys.stderr)
+                    print(text)
+                    return
+                except:
+                    continue
+                    
+        except Exception as e:
+            print(f"No transcripts: {e}", file=sys.stderr)
 
-        if len(transcript) > 30:
-            print(transcript)
-        else:
-            print("NO_TRANSCRIPT_AVAILABLE")
+        print("NO_TRANSCRIPT_AVAILABLE")
 
     except Exception as e:
-        print("SDK error: " + str(e), file=sys.stderr)
+        print(f"Error: {e}", file=sys.stderr)
         print("NO_TRANSCRIPT_AVAILABLE")
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     if len(sys.argv) < 2:
         sys.exit(1)
     get_transcript(sys.argv[1])
