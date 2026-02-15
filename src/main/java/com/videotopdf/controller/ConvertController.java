@@ -5,6 +5,7 @@ import com.videotopdf.model.UserRepository;
 import com.videotopdf.service.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +22,17 @@ public class ConvertController {
     @Autowired private YouTubeService youTubeService;
     @Autowired private TranslationService translationService;
     @Autowired private PdfService pdfService;
-    @Autowired private EmailService emailService;
     @Autowired private UserRepository userRepository;
 
     private static final String PYTHON =
-        "/usr/local/bin/python3.10";
+        System.getenv("PYTHON_PATH") != null
+        ? System.getenv("PYTHON_PATH")
+        : "/usr/local/bin/python3.10";
     private static final String TRANSCRIBE =
-        System.getProperty("user.home")
-        + "/VideoToPdf/transcribe.py";
+        System.getenv("SCRIPTS_PATH") != null
+        ? System.getenv("SCRIPTS_PATH") + "/transcribe.py"
+        : System.getProperty("user.home")
+          + "/VideoToPdf/transcribe.py";
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
@@ -43,42 +47,30 @@ public class ConvertController {
     }
 
     @PostMapping("/convert/youtube")
-    public String convertYoutube(
-            @RequestParam String youtubeUrl,
-            @RequestParam String recipientEmail,
-            Principal principal, Model model) {
-
-        model.addAttribute("username",
-            principal != null ? principal.getName() : "User");
+    public ResponseEntity<byte[]> convertYoutube(
+            @RequestParam String youtubeUrl) {
 
         try {
-            String videoId =
-                youTubeService.extractVideoId(youtubeUrl);
+            String videoId = youTubeService.extractVideoId(youtubeUrl);
             if (videoId == null || videoId.isEmpty()) {
-                model.addAttribute("error",
-                    "Invalid YouTube URL. Please check and try again.");
-                return "dashboard";
+                return ResponseEntity.badRequest()
+                    .body("Invalid YouTube URL".getBytes());
             }
 
-            JSONObject details =
-                youTubeService.getVideoDetails(videoId);
-            String title       = details.getString("title");
-            String channel     = details.getString("channelTitle");
-            String thumbnail   = details.getString("thumbnailUrl");
-            String language    = details.optString("language", "en");
+            JSONObject details = youTubeService.getVideoDetails(videoId);
+            String title = details.getString("title");
+            String channel = details.getString("channelTitle");
+            String thumbnail = details.getString("thumbnailUrl");
+            String language = details.optString("language", "en");
             String publishedAt = details.getString("publishedAt");
 
-            String transcript =
-                youTubeService.getTranscript(videoId);
+            String transcript = youTubeService.getTranscript(videoId);
             if (transcript == null || transcript.isBlank()) {
-                model.addAttribute("error",
-                    "Could not extract subtitles. "
-                    + "Try a video with captions enabled.");
-                return "dashboard";
+                return ResponseEntity.status(500)
+                    .body("Could not extract captions. Try a video with captions enabled.".getBytes());
             }
 
-            String langName =
-                translationService.detectLanguage(language);
+            String langName = translationService.detectLanguage(language);
             String finalText = language.startsWith("en")
                 ? transcript
                 : translationService.translateToEnglish(
@@ -88,34 +80,46 @@ public class ConvertController {
                 title, channel, publishedAt,
                 thumbnail, finalText, langName);
 
-            emailService.sendPdfEmail(
-                recipientEmail, title, pdf);
+            // Create safe filename
+            String filename = title
+                .replaceAll("[^a-zA-Z0-9-_\\s]", "")
+                .replaceAll("\\s+", "_");
+            if (filename.length() > 50) {
+                filename = filename.substring(0, 50);
+            }
+            filename += ".pdf";
 
-            model.addAttribute("success",
-                "✅ PDF sent to " + recipientEmail
-                + " | " + title);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(
+                ContentDisposition.attachment()
+                    .filename(filename)
+                    .build());
+
+            System.out.println("✅ PDF generated: " + title);
+
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdf);
 
         } catch (Exception e) {
-            model.addAttribute("error",
-                "Error: " + e.getMessage());
+            System.err.println("YouTube conversion error: " + e.getMessage());
+            e.printStackTrace();
+            String errorMsg = "Error: " + e.getMessage();
+            return ResponseEntity.status(500)
+                .body(errorMsg.getBytes());
         }
-        return "dashboard";
     }
 
     @PostMapping("/convert/file")
-    public String convertFile(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam String recipientEmail,
-            Principal principal, Model model) {
-
-        model.addAttribute("username",
-            principal != null ? principal.getName() : "User");
+    public ResponseEntity<byte[]> convertFile(
+            @RequestParam("file") MultipartFile file) {
 
         Path tempFile = null;
         try {
             if (file.isEmpty()) {
-                model.addAttribute("error", "Please select a file.");
-                return "dashboard";
+                return ResponseEntity.badRequest()
+                    .body("Please select a file".getBytes());
             }
 
             String origName = file.getOriginalFilename();
@@ -125,9 +129,8 @@ public class ConvertController {
                 : "";
 
             if (!ext.equals("mp4") && !ext.equals("mp3")) {
-                model.addAttribute("error",
-                    "Only MP4 and MP3 files are supported.");
-                return "dashboard";
+                return ResponseEntity.badRequest()
+                    .body("Only MP4 and MP3 files are supported".getBytes());
             }
 
             // Save uploaded file temporarily
@@ -143,20 +146,16 @@ public class ConvertController {
             String transcript = runScript(tempFile.toString());
 
             if (transcript == null || transcript.isBlank()) {
-                model.addAttribute("error",
-                    "Could not detect speech in your file. "
-                    + "Make sure it has clear spoken audio in English "
-                    + "and try again.");
-                return "dashboard";
+                return ResponseEntity.status(500)
+                    .body("Could not detect speech. Make sure file has clear spoken audio.".getBytes());
             }
 
             System.out.println("Transcript: "
                 + transcript.length() + " chars");
 
             // Translate to English if needed
-            String finalText =
-                translationService.translateToEnglish(
-                    transcript, "auto");
+            String finalText = translationService.translateToEnglish(
+                transcript, "auto");
 
             // Generate PDF
             String title = origName.substring(
@@ -167,24 +166,40 @@ public class ConvertController {
                 java.time.LocalDate.now() + "T00:00:00Z",
                 "", finalText, "Audio/Video");
 
-            emailService.sendPdfEmail(recipientEmail, title, pdf);
+            // Create safe filename
+            String filename = title
+                .replaceAll("[^a-zA-Z0-9-_\\s]", "")
+                .replaceAll("\\s+", "_");
+            if (filename.length() > 50) {
+                filename = filename.substring(0, 50);
+            }
+            filename += ".pdf";
 
-            model.addAttribute("success",
-                "✅ PDF sent to " + recipientEmail
-                + " | File: " + origName);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(
+                ContentDisposition.attachment()
+                    .filename(filename)
+                    .build());
+
+            System.out.println("✅ PDF generated: " + origName);
+
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdf);
 
         } catch (Exception e) {
-            System.err.println("Upload error: " + e.getMessage());
+            System.err.println("File conversion error: " + e.getMessage());
             e.printStackTrace();
-            model.addAttribute("error",
-                "Error: " + e.getMessage());
+            String errorMsg = "Error: " + e.getMessage();
+            return ResponseEntity.status(500)
+                .body(errorMsg.getBytes());
         } finally {
             if (tempFile != null) {
                 try { Files.deleteIfExists(tempFile); }
                 catch (Exception ignored) {}
             }
         }
-        return "dashboard";
     }
 
     private String runScript(String filePath) throws Exception {
@@ -194,6 +209,10 @@ public class ConvertController {
         ProcessBuilder pb = new ProcessBuilder(
             PYTHON, TRANSCRIBE, filePath);
         pb.redirectErrorStream(false);
+        pb.environment().put("PATH",
+            "/usr/bin:/usr/local/bin:/bin:"
+            + System.getenv("PATH"));
+
         Process proc = pb.start();
 
         // Print Python logs to console

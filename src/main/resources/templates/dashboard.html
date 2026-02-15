@@ -9,26 +9,26 @@
 
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f0f2f8;
+      background: linear-gradient(135deg, #f8f4ff 0%, #ffffff 50%, #f0e6ff 100%);
       min-height: 100vh;
     }
 
     /* ── NAVBAR ── */
     .navbar {
-      background: linear-gradient(135deg, #0d1b4b, #1a2d6e);
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
       padding: 0 40px;
       height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 20px rgba(139, 92, 246, 0.3);
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
     .navbar-brand {
-      color: #d4af37;
+      color: #ffffff;
       font-size: 24px;
       font-weight: 800;
       letter-spacing: 2px;
@@ -36,7 +36,7 @@
     }
 
     .navbar-brand span {
-      color: #fff;
+      color: #fbbf24;
       font-weight: 400;
     }
 
@@ -47,9 +47,9 @@
     }
 
     .user-badge {
-      background: rgba(212,175,55,0.15);
-      border: 1px solid #d4af37;
-      color: #d4af37;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 13px;
@@ -59,7 +59,7 @@
     .btn-logout {
       background: transparent;
       border: 1px solid rgba(255,255,255,0.3);
-      color: #aaa;
+      color: #ffffff;
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 13px;
@@ -69,19 +69,20 @@
     }
 
     .btn-logout:hover {
-      border-color: #e53e3e;
-      color: #e53e3e;
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+      color: #fecaca;
     }
 
     /* ── GOLD BAR ── */
     .gold-accent {
       height: 3px;
-      background: linear-gradient(90deg, #d4af37, #f0d060, #d4af37);
+      background: linear-gradient(90deg, #fbbf24, #fcd34d, #fbbf24);
     }
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(135deg, #0d1b4b 0%, #1a2d6e 100%);
+      background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
       padding: 50px 40px;
       text-align: center;
       color: white;
@@ -90,12 +91,12 @@
     .hero h1 {
       font-size: 38px;
       font-weight: 800;
-      color: #d4af37;
+      color: #ffffff;
       margin-bottom: 10px;
     }
 
     .hero p {
-      color: #8899cc;
+      color: #e9d5ff;
       font-size: 16px;
       max-width: 500px;
       margin: 0 auto;
@@ -120,17 +121,17 @@
     }
 
     .alert-success {
-      background: #f0fff4;
-      border: 1px solid #68d391;
-      border-left: 4px solid #38a169;
-      color: #276749;
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-left: 4px solid #22c55e;
+      color: #166534;
     }
 
     .alert-error {
-      background: #fff0f0;
-      border: 1px solid #fc8181;
-      border-left: 4px solid #e53e3e;
-      color: #c53030;
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-left: 4px solid #ef4444;
+      color: #991b1b;
     }
 
     /* ── TABS ── */
@@ -144,12 +145,12 @@
     .tab-btn {
       flex: 1;
       padding: 14px 20px;
-      background: #e2e8f0;
+      background: #f5f3ff;
       border: none;
       cursor: pointer;
       font-size: 14px;
       font-weight: 600;
-      color: #666;
+      color: #8b5cf6;
       transition: all 0.3s;
       border-radius: 10px 10px 0 0;
     }
@@ -157,22 +158,22 @@
     .tab-btn:first-child { margin-right: 4px; }
 
     .tab-btn.active {
-      background: #fff;
-      color: #0d1b4b;
-      border-bottom: 3px solid #d4af37;
+      background: #ffffff;
+      color: #7c3aed;
+      border-bottom: 3px solid #a78bfa;
     }
 
     .tab-btn:hover:not(.active) {
-      background: #cbd5e0;
-      color: #333;
+      background: #ede9fe;
+      color: #6d28d9;
     }
 
     /* ── CARD ── */
     .card {
-      background: #fff;
+      background: #ffffff;
       border-radius: 0 0 16px 16px;
       padding: 36px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 24px rgba(139, 92, 246, 0.12);
       margin-bottom: 30px;
     }
 
@@ -186,7 +187,7 @@
 
     .form-group label {
       display: block;
-      color: #0d1b4b;
+      color: #7c3aed;
       font-size: 13px;
       font-weight: 700;
       margin-bottom: 8px;
@@ -195,11 +196,10 @@
     }
 
     .form-group input[type="text"],
-    .form-group input[type="email"],
     .form-group input[type="url"] {
       width: 100%;
       padding: 13px 16px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid #e9d5ff;
       border-radius: 8px;
       font-size: 14px;
       color: #333;
@@ -208,31 +208,31 @@
     }
 
     .form-group input:focus {
-      border-color: #d4af37;
-      box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+      border-color: #a78bfa;
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
     }
 
     .form-group .hint {
       font-size: 11px;
-      color: #999;
+      color: #a78bfa;
       margin-top: 5px;
     }
 
     /* ── FILE UPLOAD ── */
     .file-upload-area {
-      border: 2px dashed #d4af37;
+      border: 2px dashed #a78bfa;
       border-radius: 12px;
       padding: 40px 20px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s;
-      background: #fffdf0;
+      background: #faf5ff;
       position: relative;
     }
 
     .file-upload-area:hover {
-      background: #fff8e0;
-      border-color: #c9a227;
+      background: #f5f3ff;
+      border-color: #8b5cf6;
     }
 
     .file-upload-area input[type="file"] {
@@ -247,17 +247,17 @@
     .upload-icon { font-size: 40px; margin-bottom: 10px; }
 
     .upload-text {
-      color: #0d1b4b;
+      color: #7c3aed;
       font-size: 15px;
       font-weight: 600;
       margin-bottom: 5px;
     }
 
-    .upload-hint { color: #999; font-size: 12px; }
+    .upload-hint { color: #a78bfa; font-size: 12px; }
 
     .file-name {
       margin-top: 10px;
-      color: #d4af37;
+      color: #8b5cf6;
       font-size: 13px;
       font-weight: 600;
     }
@@ -266,8 +266,8 @@
     .btn-convert {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, #0d1b4b, #1a2d6e);
-      color: #d4af37;
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+      color: #ffffff;
       border: none;
       border-radius: 10px;
       font-size: 16px;
@@ -283,27 +283,31 @@
     }
 
     .btn-convert:hover {
-      background: linear-gradient(135deg, #d4af37, #c9a227);
-      color: #0d1b4b;
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212,175,55,0.4);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
     }
 
     .btn-convert:active { transform: translateY(0); }
+
+    .btn-convert:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
     /* ── LOADING ── */
     .loading {
       display: none;
       text-align: center;
       padding: 20px;
-      color: #0d1b4b;
+      color: #7c3aed;
     }
 
     .spinner {
       width: 40px;
       height: 40px;
-      border: 4px solid #e2e8f0;
-      border-top: 4px solid #d4af37;
+      border: 4px solid #f5f3ff;
+      border-top: 4px solid #8b5cf6;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto 12px;
@@ -315,14 +319,14 @@
 
     /* ── HOW IT WORKS ── */
     .how-it-works {
-      background: #fff;
+      background: #ffffff;
       border-radius: 16px;
       padding: 36px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 24px rgba(139, 92, 246, 0.12);
     }
 
     .how-it-works h3 {
-      color: #0d1b4b;
+      color: #7c3aed;
       font-size: 20px;
       font-weight: 700;
       margin-bottom: 24px;
@@ -343,40 +347,40 @@
     .step-icon {
       width: 56px;
       height: 56px;
-      background: linear-gradient(135deg, #0d1b4b, #1a2d6e);
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 12px;
       font-size: 22px;
-      border: 3px solid #d4af37;
+      border: 3px solid #fbbf24;
     }
 
     .step h4 {
-      color: #0d1b4b;
+      color: #7c3aed;
       font-size: 13px;
       font-weight: 700;
       margin-bottom: 6px;
     }
 
     .step p {
-      color: #888;
+      color: #a78bfa;
       font-size: 11px;
       line-height: 1.5;
     }
 
     /* ── FOOTER ── */
     .footer {
-      background: #0d1b4b;
-      color: #666;
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+      color: #e9d5ff;
       text-align: center;
       padding: 20px;
       font-size: 12px;
       margin-top: 40px;
     }
 
-    .footer span { color: #d4af37; }
+    .footer span { color: #fbbf24; }
 
     @media (max-width: 600px) {
       .steps { grid-template-columns: repeat(2, 1fr); }
@@ -405,20 +409,11 @@
   <!-- HERO -->
   <div class="hero">
     <h1>Convert YouTube to PDF</h1>
-    <p>Extract transcripts, translate to English and
-       receive a professional PDF directly in your inbox</p>
+    <p>Extract transcripts, translate to English and download a professional PDF instantly</p>
   </div>
 
   <!-- MAIN -->
   <div class="main">
-
-    <!-- ALERTS -->
-    <div th:if="${success}" class="alert alert-success">
-      ✅ <span th:text="${success}"></span>
-    </div>
-    <div th:if="${error}" class="alert alert-error">
-      ⚠️ <span th:text="${error}"></span>
-    </div>
 
     <!-- TABS -->
     <div class="tabs">
@@ -436,8 +431,7 @@
 
       <!-- YOUTUBE TAB -->
       <div id="tab-youtube" class="tab-content active">
-        <form th:action="@{/convert/youtube}"
-              method="post" onsubmit="showLoading()">
+        <form id="youtubeForm" onsubmit="handleYoutubeSubmit(event)">
           <div class="form-group">
             <label>YouTube Video URL</label>
             <input type="url" name="youtubeUrl"
@@ -448,36 +442,23 @@
             </p>
           </div>
 
-          <div class="form-group">
-            <label>Send PDF To Email</label>
-            <input type="email" name="recipientEmail"
-                   th:value="${email}"
-                   placeholder="your@email.com" required />
-            <p class="hint">
-              The PDF transcript will be sent to this email address
-            </p>
-          </div>
-
           <div class="loading" id="loading-youtube">
             <div class="spinner"></div>
             <p>Converting your video to PDF...</p>
-            <p style="font-size:12px; color:#999; margin-top:5px;">
+            <p style="font-size:12px; color:#a78bfa; margin-top:5px;">
               This may take 30–60 seconds
             </p>
           </div>
 
           <button type="submit" class="btn-convert">
-            🚀 Convert & Send PDF
+            🚀 Convert & Download PDF
           </button>
         </form>
       </div>
 
       <!-- FILE TAB -->
       <div id="tab-file" class="tab-content">
-        <form th:action="@{/convert/file}"
-              method="post"
-              enctype="multipart/form-data"
-              onsubmit="showLoadingFile()">
+        <form id="fileForm" onsubmit="handleFileSubmit(event)" enctype="multipart/form-data">
           <div class="form-group">
             <label>Upload Video or Audio File</label>
             <div class="file-upload-area"
@@ -490,32 +471,23 @@
                 Click to browse or drag & drop
               </div>
               <div class="upload-hint">
-                Supported: MP4 Video, MP3 Audio (Max 500MB)
+                Supported: MP4 Video, MP3 Audio (Max 500MB)<br>
+                ⚠️ File must contain clear spoken English audio
               </div>
               <div class="file-name" id="fileName"></div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Send PDF To Email</label>
-            <input type="email" name="recipientEmail"
-                   th:value="${email}"
-                   placeholder="your@email.com" required />
-            <p class="hint">
-              The PDF will be sent to this email address
-            </p>
-          </div>
-
           <div class="loading" id="loading-file">
             <div class="spinner"></div>
             <p>Processing your file...</p>
-            <p style="font-size:12px; color:#999; margin-top:5px;">
+            <p style="font-size:12px; color:#a78bfa; margin-top:5px;">
               This may take a few minutes
             </p>
           </div>
 
           <button type="submit" class="btn-convert">
-            🚀 Convert & Send PDF
+            🚀 Convert & Download PDF
           </button>
         </form>
       </div>
@@ -541,9 +513,9 @@
           <p>Non-English content is translated</p>
         </div>
         <div class="step">
-          <div class="step-icon">📧</div>
-          <h4>Receive PDF</h4>
-          <p>Get your professional PDF by email</p>
+          <div class="step-icon">📥</div>
+          <h4>Download PDF</h4>
+          <p>Get your professional PDF instantly</p>
         </div>
       </div>
     </div>
@@ -551,8 +523,8 @@
 
   <!-- FOOTER -->
   <div class="footer">
-    <p>© 2024 <span>VideoToPdf</span> — All rights reserved</p>
-<p style="margin-top: 6px; font-size: 11px; color: #888;">VideoToPdf website can make mistakes. Please verify important content.</p>
+    <p>© 2026 <span>VideoToPdf</span> — All rights reserved</p>
+    <p style="margin-top: 6px; font-size: 11px; color: #e9d5ff;">VideoToPdf website can make mistakes. Please verify important content.</p>
   </div>
 
   <script>
@@ -566,18 +538,151 @@
       btn.classList.add('active');
     }
 
-    function showLoading() {
-      document.getElementById('loading-youtube').style.display = 'block';
-    }
-
-    function showLoadingFile() {
-      document.getElementById('loading-file').style.display = 'block';
-    }
-
     function showFileName(input) {
       const name = input.files[0] ? input.files[0].name : '';
       document.getElementById('fileName').textContent =
         name ? '✅ Selected: ' + name : '';
+    }
+
+    function handleYoutubeSubmit(event) {
+      event.preventDefault();
+      
+      const form = event.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      const loadingDiv = document.getElementById('loading-youtube');
+      
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '⏳ Processing...';
+      loadingDiv.style.display = 'block';
+      
+      const formData = new FormData(form);
+      
+      fetch('/convert/youtube', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.blob();
+        } else {
+          return response.text().then(text => {
+            throw new Error(text || 'Conversion failed');
+          });
+        }
+      })
+      .then(blob => {
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'youtube_transcript.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        // Show success message
+        showMessage('✅ PDF downloaded successfully!', 'success');
+        form.reset();
+      })
+      .catch(error => {
+        showMessage('❌ ' + error.message, 'error');
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        loadingDiv.style.display = 'none';
+      });
+    }
+
+    function handleFileSubmit(event) {
+      event.preventDefault();
+      
+      const form = event.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      const loadingDiv = document.getElementById('loading-file');
+      
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '⏳ Processing...';
+      loadingDiv.style.display = 'block';
+      
+      const formData = new FormData(form);
+      
+      fetch('/convert/file', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.blob();
+        } else {
+          return response.text().then(text => {
+            throw new Error(text || 'Conversion failed');
+          });
+        }
+      })
+      .then(blob => {
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'audio_transcript.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        // Show success message
+        showMessage('✅ PDF downloaded successfully!', 'success');
+        form.reset();
+        document.getElementById('fileName').textContent = '';
+      })
+      .catch(error => {
+        showMessage('❌ ' + error.message, 'error');
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        loadingDiv.style.display = 'none';
+      });
+    }
+
+    function showMessage(message, type) {
+      // Remove old messages
+      const oldMsg = document.querySelector('.flash-message');
+      if (oldMsg) oldMsg.remove();
+      
+      // Create new message
+      const div = document.createElement('div');
+      div.className = 'flash-message ' + type;
+      div.textContent = message;
+      div.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 8px;
+        background: ${type === 'success' ? '#f0fdf4' : '#fef2f2'};
+        color: ${type === 'success' ? '#166534' : '#991b1b'};
+        border: 1px solid ${type === 'success' ? '#86efac' : '#fca5a5'};
+        border-left: 4px solid ${type === 'success' ? '#22c55e' : '#ef4444'};
+        z-index: 9999;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+        font-weight: 600;
+      `;
+      
+      document.body.appendChild(div);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        div.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => div.remove(), 300);
+      }, 5000);
     }
   </script>
 
